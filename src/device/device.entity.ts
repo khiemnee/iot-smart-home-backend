@@ -11,7 +11,7 @@ export class Device{
     name:string
     @Column()
     type : DeviceKind
-    @Column()
+    @Column({default : DeviceStatus.OFFLINE})
     status : DeviceStatus
     @Column()
     firmwareVersion:string
