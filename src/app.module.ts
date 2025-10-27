@@ -4,6 +4,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { GraphQLModule } from '@nestjs/graphql';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { DeviceModule } from './device/device.module';
+import { MqttModule } from './mqtt/mqtt.module';
+import { MqttService } from './mqtt/mqtt.service';
 
 @Module({
   imports: [
@@ -26,6 +28,8 @@ import { DeviceModule } from './device/device.module';
       }),
     }),
     DeviceModule,
+    MqttModule,
   ],
+  providers:[MqttService]
 })
 export class AppModule {}
