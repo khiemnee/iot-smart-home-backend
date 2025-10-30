@@ -6,10 +6,13 @@ import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { DeviceModule } from './device/device.module';
 import { MqttModule } from './mqtt/mqtt.module';
 import { MqttService } from './mqtt/mqtt.service';
+import { SensorModule } from './sensor/sensor.module';
+
 
 @Module({
   imports: [
     AuthModule,
+    SensorModule,
     TypeOrmModule.forRoot({
       type: 'postgres',
       host: 'localhost',
@@ -28,6 +31,7 @@ import { MqttService } from './mqtt/mqtt.service';
       }),
     }),
     DeviceModule,
+   
     MqttModule,
   ],
   providers:[MqttService]
