@@ -1,10 +1,10 @@
 import { Injectable, OnModuleInit } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { InjectRepository } from '@nestjs/typeorm';
 import * as mqtt from 'mqtt';
 import { Sensor } from 'src/sensor/sensor.entity';
 import { SensorResolver } from 'src/sensor/sensor.resolver';
 import { SensorType } from 'src/sensor/sensor.type';
-
 import { Repository } from 'typeorm';
 
 @Injectable()
@@ -12,16 +12,18 @@ export class MqttService implements OnModuleInit {
   constructor(
     @InjectRepository(Sensor)
     private sensorRepository: Repository<Sensor>,
+    private configService: ConfigService
   ) {}
   private client: mqtt.MqttClient;
 
   onModuleInit() {
     this.client = mqtt.connect({
-      host: '9b87979a1f8f4f0fa217a4fa8827c4b9.s1.eu.hivemq.cloud',
-      port: 8884,
-      username: 'khiem',
-      password: 'Phamduykhiem2911',
-      protocol: 'wss',
+      host: this.configService.get('MQTT_HOST'),
+      port: this.configService.get('MQTT_PORT'),
+      username: this.configService.get('MQTT_USERNAME'),
+      password: this.configService.get('MQTT_PASSWORD'),
+      protocol: this.configService.get('MQTT_PROTOCOL'),
+      
     });
     this.client.on('connect', () => {
       console.log('Connected to MQTT broker');
@@ -73,4 +75,19 @@ export class MqttService implements OnModuleInit {
       );
     }
   }
+  public simulateDeviceMessage(deviceId: string, temp: number, hum: number): void {
+    const topic = `device/${deviceId}/sensor`;
+    
+   
+    const payloadObject = { 
+        temperature: temp, 
+        humidity: hum 
+    };
+    const payload = Buffer.from(JSON.stringify(payloadObject));
+    
+    
+    
+   
+    this.handleIncomingMessage(topic, payload);
+}
 }

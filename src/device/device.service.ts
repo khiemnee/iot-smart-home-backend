@@ -25,7 +25,7 @@ export class DeviceService {
       user,
       firmwareVersion,
     });
-    console.log(device)
+    
     return await this.deviceRepository.save(device);
   }
 

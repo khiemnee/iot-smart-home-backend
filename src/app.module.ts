@@ -7,10 +7,14 @@ import { DeviceModule } from './device/device.module';
 import { MqttModule } from './mqtt/mqtt.module';
 import { MqttService } from './mqtt/mqtt.service';
 import { SensorModule } from './sensor/sensor.module';
-
+import {ConfigModule} from '@nestjs/config'
 
 @Module({
   imports: [
+    ConfigModule.forRoot({
+      isGlobal: true, 
+      envFilePath: ['.env'],
+    }),
     AuthModule,
     SensorModule,
     TypeOrmModule.forRoot({

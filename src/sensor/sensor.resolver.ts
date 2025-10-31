@@ -19,7 +19,7 @@ export class SensorResolver {
   }
 
   static publishSensorData(data: SensorType) {
-    console.log(data)
+    
     pubSub.publish('sensorDataReceived', { sensorDataReceived: data });
   }
 }
