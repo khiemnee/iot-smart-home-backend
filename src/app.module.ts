@@ -7,7 +7,7 @@ import { DeviceModule } from './device/device.module';
 import { MqttModule } from './mqtt/mqtt.module';
 import { MqttService } from './mqtt/mqtt.service';
 import { SensorModule } from './sensor/sensor.module';
-import {ConfigModule} from '@nestjs/config'
+import {ConfigModule,ConfigService} from '@nestjs/config'
 
 @Module({
   imports: [
@@ -17,15 +17,14 @@ import {ConfigModule} from '@nestjs/config'
     }),
     AuthModule,
     SensorModule,
-    TypeOrmModule.forRoot({
-      type: 'postgres',
-      host: 'localhost',
-      port: 5432,
-      username: 'postgres',
-      password: 'phamduykhiem2911',
-      database: 'iot_smart_home',
-      autoLoadEntities: true,
-      synchronize: true,
+    TypeOrmModule.forRootAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) => ({
+        type: 'postgres',
+        url: configService.get<string>('DATABASE_URL'),
+        autoLoadEntities: true,
+      }),
     }),
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
